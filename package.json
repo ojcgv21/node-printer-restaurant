@@ -9,6 +9,9 @@
   "author": "Oscar Garay Velasquez",
   "license": "ISC",
   "dependencies": {
-    "printer": "^0.2.1"
+    "dotenv": "^6.2.0",
+    "printer": "^0.2.1",
+    "promise-mysql": "^3.3.1",
+    "underscore": "^1.9.1"
   }
 }
