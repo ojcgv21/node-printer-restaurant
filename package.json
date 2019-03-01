@@ -1,0 +1,14 @@
+{
+  "name": "node-printer-restaurant",
+  "version": "1.0.0",
+  "description": "cronjob for restaurant printer",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Oscar Garay Velasquez",
+  "license": "ISC",
+  "dependencies": {
+    "printer": "^0.2.1"
+  }
+}
