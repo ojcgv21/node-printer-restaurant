@@ -13,18 +13,24 @@ const prepareForPrint = str => {
     return new Buffer(printData);
 };
 
-exports.sendPrint = (str, printerName) => {
-  printer.printDirect({
-    data: prepareForPrint(str),
-    type: 'RAW',
-    printer: printerName,
-    success: function (jobID) {
-      console.log("ID: " + jobID);
-    },
-    error: function (err) {
-      console.log('printer module error: '+ err);
-      throw err;
-    }
+exports.sendPrintAsync = ticket => {
+  if (process.env.DEBUG === 'TRUE') {
+    console.log(ticket);
+    return;
+  }
+  return new Promise((resolve, reject) => {
+    printer.printDirect({
+      data: process.env.TICKETERA === 'TRUE' ? ticket.text : prepareForPrint(ticket.text),
+      type: 'RAW',
+      printer: ticket.printer,
+      success: jobID => {
+        resolve(console.log("ID: " + jobID));
+      },
+      error: err => {
+        reject(console.log('printer module error: ' + err));
+        throw err;
+      }
+    });
   });
 }
 
