@@ -2,7 +2,7 @@ const sqlTools = require('../utils/sql.js');
 const dotenv = require('dotenv');
 dotenv.config({ path: './.env' });
 
-const queryPedidos = ' SELECT ' +
+const queryPedidos = ' SELECT DISTINCT' +
                         ' v.vId AS id_venta,' +
                         ' v.vFecha AS fecha_pedido, ' +
                         ' m.mNumero AS numero_mesa, ' +
@@ -14,8 +14,6 @@ const queryPedidos = ' SELECT ' +
                         ' ON v.vMesa = m.mId ' +
                         ' INNER JOIN persona per ' +
                         ' ON per.pId = v.vIdPersona ' +
-                        ' INNER JOIN venta_detalle vd ' +
-                        ' ON vd.vId = v.vId ' +
                     " WHERE p.status <> 'PRI'";
 
 const printers = {
@@ -51,7 +49,7 @@ const buildTicket = (pedido, type) => {
     });
     body += `${pedido.fecha_pedido}\n`;
     return {
-        ticket: body,
+        text: body,
         printer: printers[type]
     };
 };
