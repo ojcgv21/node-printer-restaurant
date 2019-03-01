@@ -1,21 +1,11 @@
-var printer = require('printer');
-var fs = require('fs');
+const sqlPool = require('./utils/standalone.js');
+const sqlTools = require('./utils/sql.js');
+const ticketPrinter = require('./modules/ticket.printer.js');
 
-//var info = fs.readFileSync('ticket.txt').toString();
-var template = "N\nS4\nD15\nq400\nR\nB20,10,0,1,2,30,173,B,\"barcode\"\nP0\n";
-
-function sendPrint() {
-  printer.printDirect({
-    data: template.replace(/barcode/, "123"),
-    type: 'RAW',
-    success: function (jobID) {
-      console.log("ID: " + jobID);
-    },
-    error: function (err) {
-      console.log('printer module error: '+err);
-      throw err;
-    }
-  });
-}
-
-sendPrint();
+sqlTools.sw(async () => {
+  const connection = await sqlPool.connection();
+  const query = 'SELECT * FROM venta_detalle';
+  const rows = await connection.query(query);
+  console.log(rows);
+  await connection.end();
+});
