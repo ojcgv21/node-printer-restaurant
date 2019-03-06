@@ -13,13 +13,13 @@ const prepareForPrint = str => {
     return Buffer.from(printData);
 };
 
-exports.sendPrintAsync = ticket => {
+exports.sendPrintAsync = (ticket, cut) => {
   if (process.env.DEBUG === 'TRUE') {
     console.log(ticket);
   }
   return new Promise((resolve, reject) => {
     printer.printDirect({
-      data: prepareForPrint(ticket.text),
+      data: cut ? prepareForPrint('') : ticket.text,
       type: 'RAW',
       printer: ticket.printer,
       success: jobID => {

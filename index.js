@@ -10,7 +10,9 @@ sqlTools.sw(async () => {
   const tickets = pedidos.buildTickets(ps);
 
   await sqlTools.pmap(tickets, async (ticket) => {
-    await ticketPrinter.sendPrintAsync(ticket);
+    await ticketPrinter.sendPrintAsync(ticket, false);
+    await ticketPrinter.sleep(2000);
+    await ticketPrinter.sendPrintAsync('', true);
     await ticketPrinter.sleep(2000);
   }, { concurrency: 1 });
   
