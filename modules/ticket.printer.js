@@ -10,16 +10,33 @@ String.prototype.toBytes = () => {
 
 const prepareForPrint = str => {
     const printData = str.toBytes().concat([0x01B, 0x64, 10, 0x1d, 0x56, 0x00]);
-    return Buffer.from(printData);
+    return printData;
 };
 
-exports.sendPrintAsync = (ticket, cut) => {
+exports.cutPaper = () => {
+  return new Promise((resolve, reject) => {
+    printer.printDirect({
+      data: Buffer.from('\x1D\x56\x49'),
+      type: 'RAW',
+      printer: ticket.printer,
+      success: jobID => {
+        resolve(console.log("ID: " + jobID));
+      },
+      error: err => {
+        reject(console.log('printer module error: ' + err));
+        throw err;
+      }
+    });
+  });
+};
+
+exports.sendPrintAsync = (ticket) => {
   if (process.env.DEBUG === 'TRUE') {
     console.log(ticket);
   }
   return new Promise((resolve, reject) => {
     printer.printDirect({
-      data: cut ? prepareForPrint('') : ticket.text,
+      data: ticket.text,
       type: 'RAW',
       printer: ticket.printer,
       success: jobID => {
