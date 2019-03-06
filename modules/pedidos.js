@@ -50,7 +50,8 @@ const buildTicket = (pedido, type) => {
     body += `${pedido.fecha_pedido}\n`;
     return {
         text: body,
-        printer: printers[type]
+        printer: printers[type],
+        id_venta: pedido.id_venta
     };
 };
 
