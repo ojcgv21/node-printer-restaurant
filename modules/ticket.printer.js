@@ -13,12 +13,12 @@ const prepareForPrint = str => {
     return printData;
 };
 
-exports.cutPaper = printer => {
+exports.cutPaper = printerName => {
   return new Promise((resolve, reject) => {
     printer.printDirect({
       data: Buffer.from('\x1D\x56\x49'),
       type: 'RAW',
-      printer: printer,
+      printer: printerName,
       success: jobID => {
         resolve(console.log("ID: " + jobID));
       },
