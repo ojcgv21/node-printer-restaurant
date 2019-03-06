@@ -12,7 +12,7 @@ sqlTools.sw(async () => {
   await sqlTools.pmap(tickets, async (ticket) => {
     await ticketPrinter.sendPrintAsync(ticket);
     await ticketPrinter.sleep(2000);
-    await ticketPrinter.cutPaper();
+    await ticketPrinter.cutPaper(ticket.printer);
     await ticketPrinter.sleep(2000);
   }, { concurrency: 1 });
   

@@ -13,7 +13,7 @@ const prepareForPrint = str => {
     return printData;
 };
 
-exports.cutPaper = () => {
+exports.cutPaper = printer => {
   return new Promise((resolve, reject) => {
     printer.printDirect({
       data: Buffer.from('\x1D\x56\x49'),
