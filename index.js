@@ -11,6 +11,7 @@ sqlTools.sw(async () => {
 
   await sqlTools.pmap(tickets, async (ticket) => {
     await ticketPrinter.sendPrintAsync(ticket);
+    await ticketPrinter.sleep(2000);
   }, { concurrency: 1 });
   
 
