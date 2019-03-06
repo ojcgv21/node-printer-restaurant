@@ -16,11 +16,10 @@ const prepareForPrint = str => {
 exports.sendPrintAsync = ticket => {
   if (process.env.DEBUG === 'TRUE') {
     console.log(ticket);
-    return;
   }
   return new Promise((resolve, reject) => {
     printer.printDirect({
-      data: process.env.TICKETERA === 'TRUE' ? ticket.text : prepareForPrint(ticket.text),
+      data: prepareForPrint(ticket.text),
       type: 'RAW',
       printer: ticket.printer,
       success: jobID => {
