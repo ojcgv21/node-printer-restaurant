@@ -10,13 +10,13 @@ String.prototype.toBytes = () => {
 
 const prepareForPrint = str => {
     const printData = str.toBytes().concat([0x01B, 0x64, 10, 0x1d, 0x56, 0x00]);
-    return Buffer.from(printData);
+    return Buffer.from(printData, 'HEX');
 };
 
 exports.cutPaper = printerName => {
   return new Promise((resolve, reject) => {
     printer.printDirect({
-      data: Buffer.from('\x1D\x56\x49', 'HEX'),
+      data: prepareForPrint(''),
       type: 'RAW',
       printer: printerName,
       success: jobID => {
