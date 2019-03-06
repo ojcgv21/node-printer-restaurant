@@ -18,7 +18,7 @@ exports.cutPaper = printer => {
     printer.printDirect({
       data: Buffer.from('\x1D\x56\x49'),
       type: 'RAW',
-      printer: ticket.printer,
+      printer: printer,
       success: jobID => {
         resolve(console.log("ID: " + jobID));
       },
