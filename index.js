@@ -14,8 +14,10 @@ sqlTools.sw(async () => {
     await ticketPrinter.sleep(2000);
     await ticketPrinter.cutPaper(ticket.printer);
     await ticketPrinter.sleep(2000);
-    const updateQuery = 'UPDATE pid SET status = ? WHERE saleId = ?';
+    const updateQuery = 'UPDATE pid SET status = ? WHERE saleId = ? ';
     await connection.query(updateQuery, ['PRI', ticket.id_venta]);
+    const updateQueryVentaDetalle = 'UPDATE venta_detalle SET detalle_imp = ? WHERE vId = ? AND detalle_imp = ? ';
+    await connection.query(updateQueryVentaDetalle, [1, ticket.id_venta, 0]);
     await connection.commit();
   }, { concurrency: 1 });
   
