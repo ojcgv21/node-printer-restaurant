@@ -32,9 +32,9 @@ exports.get = async (connection) => {
                             ' INNER JOIN productos pro ' +
                             ' ON pro.idProducto = vd.vd_idProducto ' +
                         ' WHERE ' +
-                            ' vd.vId = ? AND pro.pTicket = ? ';
-        pedido.cocina = await connection.query(query, [pedido.id_venta, 1]);
-        pedido.bar = await connection.query(query, [pedido.id_venta, 0]);
+                            ' vd.vId = ? AND pro.pTicket = ? AND vd.detalle_imp = ?';
+        pedido.cocina = await connection.query(query, [pedido.id_venta, 1, 0]);
+        pedido.bar = await connection.query(query, [pedido.id_venta, 0, 0]);
     });
     return pedidos;
 };
