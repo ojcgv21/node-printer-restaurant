@@ -6,7 +6,8 @@ const queryPedidos = ' SELECT DISTINCT' +
                         ' v.vId AS id_venta,' +
                         ' v.vFecha AS fecha_pedido, ' +
                         ' m.mNumero AS numero_mesa, ' +
-                        ' CONCAT(per.pNombres," ", per.pApellidos) AS mozo ' +
+                        ' CONCAT(per.pNombres," ", per.pApellidos) AS mozo, ' +
+                        ' v.vObservacion AS observacion ' +
                     ' FROM pid p ' +
                         ' INNER JOIN venta v ' +
                         ' ON p.saleId = v.vId ' +
@@ -48,6 +49,8 @@ const buildTicket = (pedido, type) => {
         body += `${e.cantidad}      ${e.nombre}\n`;
     });
     body += `${pedido.fecha_pedido}\n`;
+    body += `Observaciones: \n`;
+    body += `${pedido.observacion}\n`;
     return {
         text: body,
         printer: printers[type],
