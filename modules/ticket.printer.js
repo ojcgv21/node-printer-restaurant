@@ -15,7 +15,6 @@ const prepareForPrint = str => {
 
 exports.cutPaper = printerName => {
   if (process.env.DEBUG === 'TRUE') {
-    console.log(ticket);
     return;
   }
   return new Promise((resolve, reject) => {
