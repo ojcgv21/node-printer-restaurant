@@ -14,6 +14,10 @@ const prepareForPrint = str => {
 };
 
 exports.cutPaper = printerName => {
+  if (process.env.DEBUG === 'TRUE') {
+    console.log(ticket);
+    return;
+  }
   return new Promise((resolve, reject) => {
     printer.printDirect({
       data: prepareForPrint(''),
@@ -33,6 +37,7 @@ exports.cutPaper = printerName => {
 exports.sendPrintAsync = (ticket) => {
   if (process.env.DEBUG === 'TRUE') {
     console.log(ticket);
+    return;
   }
   return new Promise((resolve, reject) => {
     printer.printDirect({
