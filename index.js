@@ -11,9 +11,9 @@ sqlTools.sw(async () => {
 
   await sqlTools.pmap(tickets, async (ticket) => {
     await ticketPrinter.sendPrintAsync(ticket);
-    await ticketPrinter.sleep(2000);
+    await ticketPrinter.sleep(500);
     await ticketPrinter.cutPaper(ticket.printer);
-    await ticketPrinter.sleep(2000);
+    await ticketPrinter.sleep(500);
     let arr = new Array(ticket.ids_venta_detalle.length).fill('?').join(',');
     const updateQueryVentaDetalle = `UPDATE venta_detalle SET detalle_imp = ? WHERE vdId in (${arr}) AND detalle_imp = ? `;
     await connection.query(updateQueryVentaDetalle, [1, ...ticket.ids_venta_detalle, 0]);
