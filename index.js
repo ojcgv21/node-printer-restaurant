@@ -14,10 +14,12 @@ sqlTools.sw(async () => {
     await ticketPrinter.sleep(2000);
     await ticketPrinter.cutPaper(ticket.printer);
     await ticketPrinter.sleep(2000);
-    const updateQuery = 'UPDATE pid SET status = ? WHERE saleId = ? ';
-    await connection.query(updateQuery, ['PRI', ticket.id_venta]);
-    const updateQueryVentaDetalle = 'UPDATE venta_detalle SET detalle_imp = ? WHERE vId = ? AND detalle_imp = ? ';
-    await connection.query(updateQueryVentaDetalle, [1, ticket.id_venta, 0]);
+    let arr = new Array(ticket.ids_venta_detalle.length).fill('?').join(',');
+    arr = arr.slice(0, -1);
+    const updateQuery = `UPDATE pid SET status = ? WHERE saleId in (${arr}) `;
+    await connection.query(updateQuery, ['PRI', ...ticket.ids_venta_detalle]);
+    const updateQueryVentaDetalle = `UPDATE venta_detalle SET detalle_imp = ? WHERE vdId in (${arr}) AND detalle_imp = ? `;
+    await connection.query(updateQueryVentaDetalle, [1, ...ticket.ids_venta_detalle, 0]);
     await connection.commit();
   }, { concurrency: 1 });
   

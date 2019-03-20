@@ -6,7 +6,7 @@ sqlTools.sw(async () => {
     const query =   " CREATE TRIGGER trg_printer " + 
                     " AFTER INSERT ON venta_detalle FOR EACH ROW " +
                     " BEGIN " +
-                    " INSERT INTO pid SET saleId = NEW.vId, status = 'WAIT'; " +
+                    " INSERT INTO pid SET saleId = NEW.vdId, status = 'WAIT'; " +
                     " END;";
     await connection.query(query);
     await connection.commit();

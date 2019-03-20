@@ -2,19 +2,21 @@ const sqlTools = require('../utils/sql.js');
 const dotenv = require('dotenv');
 dotenv.config({ path: './.env' });
 
-const queryPedidos = ' SELECT DISTINCT' +
-                        ' v.vId AS id_venta,' +
+const queryPedidos = ' SELECT DISTINCT ' +
+                        ' v.vId AS id_venta, ' +
                         ' v.vFecha AS fecha_pedido, ' +
                         ' m.mNumero AS numero_mesa, ' +
                         ' CONCAT(per.pNombres," ", per.pApellidos) AS mozo, ' +
                         ' v.vObservacion AS observacion ' +
                     ' FROM pid p ' +
+                        ' INNER JOIN venta_detalle vd ' +
+                            ' ON p.saleId = vd.vdId ' +
                         ' INNER JOIN venta v ' +
-                        ' ON p.saleId = v.vId ' +
+                            ' ON v.vId = vd.vId ' +
                         ' INNER JOIN mesa m ' +
-                        ' ON v.vMesa = m.mId ' +
+                            ' ON v.vMesa = m.mId ' +
                         ' INNER JOIN persona per ' +
-                        ' ON per.pId = v.vIdPersona ' +
+                            ' ON per.pId = v.vIdPersona ' +
                     " WHERE p.status <> 'PRI'";
 
 const printers = {
@@ -27,7 +29,8 @@ exports.get = async (connection) => {
     await sqlTools.pmap(pedidos, async (pedido) => {
         const query = ' SELECT ' +
                             ' vd.vd_Cantidad AS cantidad, ' +
-                            ' pro.pNombre AS nombre' +
+                            ' pro.pNombre AS nombre,' +
+                            ' vd.vdId AS id_venta_detalle ' +
                         ' FROM venta_detalle vd ' +
                             ' INNER JOIN productos pro ' +
                             ' ON pro.idProducto = vd.vd_idProducto ' +
@@ -40,6 +43,7 @@ exports.get = async (connection) => {
 };
 
 const buildTicket = (pedido, type) => {
+    const ids_venta_detalle = [];
     let body = `     ${type}     \n` +
                 '****************\n' +
                 `Mesa: ${pedido.numero_mesa}\n` +
@@ -47,6 +51,7 @@ const buildTicket = (pedido, type) => {
                 `Cant     Producto\n`;
     pedido[type].forEach(e => {
         body += `${e.cantidad}      ${e.nombre}\n`;
+        ids_venta_detalle.push(e.id_venta_detalle);
     });
     body += `${pedido.fecha_pedido}\n`;
     body += `Observaciones: \n`;
@@ -54,7 +59,7 @@ const buildTicket = (pedido, type) => {
     return {
         text: body,
         printer: printers[type],
-        id_venta: pedido.id_venta
+        ids_venta_detalle: ids_venta_detalle
     };
 };
 
