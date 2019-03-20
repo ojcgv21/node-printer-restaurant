@@ -8,16 +8,14 @@ const queryPedidos = ' SELECT DISTINCT ' +
                         ' m.mNumero AS numero_mesa, ' +
                         ' CONCAT(per.pNombres," ", per.pApellidos) AS mozo, ' +
                         ' v.vObservacion AS observacion ' +
-                    ' FROM pid p ' +
-                        ' INNER JOIN venta_detalle vd ' +
-                            ' ON p.saleId = vd.vdId ' +
+                    ' FROM venta_detalle vd ' +
                         ' INNER JOIN venta v ' +
                             ' ON v.vId = vd.vId ' +
                         ' INNER JOIN mesa m ' +
                             ' ON v.vMesa = m.mId ' +
                         ' INNER JOIN persona per ' +
                             ' ON per.pId = v.vIdPersona ' +
-                    " WHERE p.status <> 'PRI'";
+                    " WHERE vd.detalle_imp = ?";
 
 const printers = {
     cocina: process.env.PRINTER_COCINA,
@@ -25,7 +23,7 @@ const printers = {
 };
 
 exports.get = async (connection) => {
-    const pedidos = await connection.query(queryPedidos);
+    const pedidos = await connection.query(queryPedidos, 0);
     await sqlTools.pmap(pedidos, async (pedido) => {
         const query = ' SELECT ' +
                             ' vd.vd_Cantidad AS cantidad, ' +

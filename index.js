@@ -15,8 +15,6 @@ sqlTools.sw(async () => {
     await ticketPrinter.cutPaper(ticket.printer);
     await ticketPrinter.sleep(2000);
     let arr = new Array(ticket.ids_venta_detalle.length).fill('?').join(',');
-    const updateQuery = `UPDATE pid SET status = ? WHERE saleId in (${arr}) `;
-    await connection.query(updateQuery, ['PRI', ...ticket.ids_venta_detalle]);
     const updateQueryVentaDetalle = `UPDATE venta_detalle SET detalle_imp = ? WHERE vdId in (${arr}) AND detalle_imp = ? `;
     await connection.query(updateQueryVentaDetalle, [1, ...ticket.ids_venta_detalle, 0]);
     await connection.commit();
